@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Blink {
+  id           String   @id @default(nanoid())
+  title        String
+  description  String?
+  image        String?
+  price        String
+  walletAddress String
+  consumerSecret  String
+  consumerKey   String
+  wooUrl  String
+  product_id   String
+  createdAt    DateTime @default(now())
+}
+
