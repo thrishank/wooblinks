@@ -81,7 +81,7 @@ export default function Page() {
       updated_price: (product.price / parseFloat(currency_rate)).toFixed(2),
     };
     console.log("fldsf", metadata);
-    console.log(metadata.updated_price)
+    console.log(metadata.updated_price);
     if (!connected) {
       toast.error("Please connect your wallet first to recive the payments");
       setTimeout(() => {

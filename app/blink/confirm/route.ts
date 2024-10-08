@@ -23,7 +23,18 @@ export const GET = async (req: Request) => {
 export const OPTIONS = async () => Response.json(null, { headers });
 
 interface dataType {
-  first_name: string, last_name: string, address: string, city: string, state: string, postcode: string, country: string, email: string, phone: string, product_id: string,consumerKey:string,consumerSecret:string
+  first_name: string;
+  last_name: string;
+  address: string;
+  city: string;
+  state: string;
+  postcode: string;
+  country: string;
+  email: string;
+  phone: string;
+  product_id: string;
+  consumerKey: string;
+  consumerSecret: string;
 }
 
 export const POST = async (req: Request) => {
@@ -78,67 +89,25 @@ export const POST = async (req: Request) => {
       });
     }
 
-    // const orderData = {
-    //   order: {
-    //     email: data.email,
-    //     fulfillment_status: "fulfilled",
-    //     send_receipt: true,
-    //     notify_customer: true,
-    //     line_items: [
-    //       {
-    //         variant_id: parseInt(db_data?.product_id!),
-    //         quantity: 1,
-    //       },
-    //     ],
-    //     shipping_address: {
-    //       first_name:data.,
-    //       last_name: data.name,
-    //       address1: data.address,
-    //       phone: data.phone,
-    //       city: data.city,
-    //       province: data.state,
-    //       country: data.country,
-    //       zip: data.zip,
-    //     },
-    //     note: "Ordered via Solana blinks",
-    //     note_attributes: [
-    //       {
-    //         name: "payment_method",
-    //         value: "cryptocurrency",
-    //       },
-    //       {
-    //         name: "Transaction Signature",
-    //         value: signature,
-    //       },
-    //       {
-    //         name: "payer wallet address",
-    //         value: account.toBase58(),
-    //       },
-    //     ],
-    //   },
-    // };
-
-    // const shopifyWebsiteUrl = `${db_data?.website_url}/admin/api/2024-07/orders.json`;
-    // // const token = decryptApiKey(db_data?.accessToken!);
-   
-    // if (res.statusText !== "Created") {
-    //   throw "Error creating order in shopify store please contact support if you have the done the payment";
-    // }
-   const createdorder=  createPaidOrder(
-    data.first_name,
-    data.last_name,
-    data.address,
-    data.city,
-    data.state,
-    data.postcode,
-    data.country,
-    data.email,
-    data.phone,
-    db_data?.product_id!,
-    //@ts-ignore
-  db_data?.consumerKey,
-  //@ts-ignore
-db_data.consumerSecret)
+    const createdorder = createPaidOrder(
+      data.first_name,
+      data.last_name,
+      data.address,
+      data.city,
+      data.state,
+      data.postcode,
+      data.country,
+      data.email,
+      data.phone,
+      db_data?.product_id!,
+      //@ts-ignore
+      db_data?.consumerKey,
+      //@ts-ignore
+      db_data.consumerSecret,
+      db_data?.wooUrl,
+      db_data?.price
+    );
+    
     const payload: CompletedAction = {
       type: "completed",
       title: "Order Created Successfully",
