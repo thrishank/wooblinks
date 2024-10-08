@@ -12,7 +12,7 @@ export async function verifyTx(
   to_addr: string,
   price: string
 ): Promise<{ success: boolean; error?: string }> {
-  const connection = new Connection(clusterApiUrl("mainnet-beta"), {
+  const connection = new Connection(clusterApiUrl("devnet"), {
     commitment: "confirmed",
   });
 

@@ -31,7 +31,7 @@ export async function GET(req: Request) {
         id: id!,
       },
     });
-
+    console.log("fking data ", data);
     if (!data) {
       return new Response("Not found", { status: 404 });
     }
@@ -45,27 +45,66 @@ export async function GET(req: Request) {
         actions: [
           {
             label: `Buy Now ${data.price}`,
+            type: `post`,
             href: new URL(
-              `/blink?to=${data.walletAddres}&price=${data.price}&id=${id}`,
+              `/blink?to=${data.walletAddress}&price=${data.price}&id=${id}`,
               req.url
             ).toString(),
-            parameters :[
-              { name: "first_name", type: "text", label: "Enter your first name", required: true },
-              { name: "last_name", type: "text", label: "Enter your last name", required: true },
-              { name: "address", type: "textarea", label: "Address", required: true },
+            parameters: [
+              {
+                name: "first_name",
+                type: "text",
+                label: "Enter your first name",
+                required: true,
+              },
+              {
+                name: "last_name",
+                type: "text",
+                label: "Enter your last name",
+                required: true,
+              },
+              {
+                name: "address",
+                type: "textarea",
+                label: "Address",
+                required: true,
+              },
               { name: "city", type: "text", label: "City", required: true },
-              { name: "state", type: "text", label: "Enter your state", required: true },
-              { name: "postcode", type: "text", label: "PIN CODE", required: true },
-              { name: "country", type: "text", label: "Country/Region", required: true },
-              { name: "email", type: "email", label: "Enter your email", required: true },
-              { name: "phone", type: "number", label: "Phone number with country code", required: false },
+              {
+                name: "state",
+                type: "text",
+                label: "Enter your state",
+                required: true,
+              },
+              {
+                name: "postcode",
+                type: "text",
+                label: "PIN CODE",
+                required: true,
+              },
+              {
+                name: "country",
+                type: "text",
+                label: "Country/Region",
+                required: true,
+              },
+              {
+                name: "email",
+                type: "email",
+                label: "Enter your email",
+                required: true,
+              },
+              {
+                name: "phone",
+                type: "number",
+                label: "Phone number with country code",
+                required: false,
+              },
             ],
-            
           },
         ],
       },
     };
-
     return Response.json(payload, { headers });
   } catch (e) {
     let message = "An error occurred";
@@ -86,10 +125,7 @@ export async function POST(req: Request) {
 
     const body: ActionPostRequest = await req.json();
 
-    const connection = new Connection(
-      clusterApiUrl("mainnet-beta"),
-      "confirmed"
-    );
+    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
     let account: PublicKey;
     try {
@@ -105,7 +141,7 @@ export async function POST(req: Request) {
 
     const mint_address = new PublicKey(
       // "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-       "9jyEAn15hMY7f5iKdUTPE5ZGaxD4BfsbHggwHFYvgF61"
+      "9jyEAn15hMY7f5iKdUTPE5ZGaxD4BfsbHggwHFYvgF61"
     );
 
     try {
@@ -140,6 +176,7 @@ export async function POST(req: Request) {
     }).add(instruction);
 
     const payload: ActionPostResponse = await createPostResponse({
+      //@ts-ignore
       fields: {
         transaction: tx,
         message:

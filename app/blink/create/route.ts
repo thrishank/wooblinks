@@ -17,8 +17,16 @@ export async function POST(req: Request) {
     const url = `${wooEcomWebsiteUrl}`;
 
     const body = await req.json();
-    const { title, description, image, price, walletAddress, product_id,updated_price } = body;
-
+    const {
+      title,
+      description,
+      image,
+      price,
+      walletAddress,
+      product_id,
+      updated_price,
+    } = body;
+    console.log("price is.  ", price);
     const blink = await prisma.blink.create({
       data: {
         title,
@@ -28,7 +36,7 @@ export async function POST(req: Request) {
         walletAddress,
         consumerSecret: consumerSecret!,
         consumerKey: consumerKey!,
-        wooUrl : url!,
+        wooUrl: url!,
         product_id: product_id.toString(),
       },
     });

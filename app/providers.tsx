@@ -20,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     []
   );
-  const endpoint = useMemo(() => clusterApiUrl("mainnet-beta"), []);
+  const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
 
   return (
     <SessionProvider>
