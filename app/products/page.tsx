@@ -23,7 +23,7 @@ export default function Page() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedLink, setGeneratedLink] = useState("");
   const [currency_rate, setCurrencyRate] = useState("1");
-  const [currencySymbol, setCurrencySymbol] = useState("1");
+  const [currencySymbol, setCurrencySymbol] = useState("USD");
 
   const { publicKey, connected } = useWallet();
   const router = useRouter();
@@ -43,29 +43,25 @@ export default function Page() {
 
   console.log("urllink", urLink);
   useEffect(() => {
-    const fetchdata = async () => {
+    const fetchData = async () => {
       try {
-        const response: AxiosResponse<CurrencyResponse> = await axios.get(
+        const response = await axios.get(
           `${urLink}/wp-json/wc/v3/data/currencies/current`,
-          //@ts-ignore
           { auth }
         );
+
         setCurrencySymbol(response.data.code);
+
+        const currencyRateResponse = await fetch(currency_url);
+        const currencyRateData = await currencyRateResponse.json();
+        setCurrencyRate(currencyRateData.conversion_rates[response.data.code]);
       } catch (error) {
         console.error("Error fetching currency data:", error);
       }
-
-      if (currency_rate !== "USD") {
-        fetch(currency_url).then((res) => {
-          res.json().then((data) => {
-            setCurrencyRate(data.conversion_rates[currencySymbol!]);
-          });
-        });
-      }
     };
-    fetchdata();
-  }, []);
 
+    fetchData();
+  }, [urLink, currency_url, auth]);
   useEffect(() => {
     fetch(`/api/products`)
       .then((res) => res.json())
@@ -85,6 +81,7 @@ export default function Page() {
       updated_price: (product.price / parseFloat(currency_rate)).toFixed(2),
     };
     console.log("fldsf", metadata);
+    console.log(metadata.updated_price)
     if (!connected) {
       toast.error("Please connect your wallet first to recive the payments");
       setTimeout(() => {
